@@ -16,8 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import com.blog.om.fusiveleletronico.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

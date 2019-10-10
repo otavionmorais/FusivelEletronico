@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.blog.om.fusiveleletronico.R;
 
 public class GraficoActivity extends AppCompatActivity {
 
