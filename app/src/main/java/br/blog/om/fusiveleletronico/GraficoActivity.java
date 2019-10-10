@@ -1,17 +1,14 @@
-package com.example.primeiraaplicacao;
+package br.blog.om.fusiveleletronico;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.blog.om.fusiveleletronico.R;
 
 public class GraficoActivity extends AppCompatActivity {
 

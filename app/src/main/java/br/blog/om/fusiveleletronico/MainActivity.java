@@ -1,32 +1,22 @@
-package com.example.primeiraaplicacao;
+package br.blog.om.fusiveleletronico;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.app.Service;
-import android.content.ClipData;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Icon;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.primeiraaplicacao.service.AlarmeVerificacao;
+
+import com.blog.om.fusiveleletronico.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +26,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -62,35 +51,15 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void scheduleAlarm() {
-
-
-
-        // Construct an intent that will execute the AlarmReceiver
-        Intent intent = new Intent(getApplicationContext(), AlarmeVerificacao.class);
-        // Create a PendingIntent to be triggered when the alarm goes off
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmeVerificacao.REQUEST_CODE,
-                intent, PendingIntent.FLAG_IMMUTABLE);
-        // Setup periodic alarm every 5 seconds
-        long firstMillis = System.currentTimeMillis(); // alarm is set right away
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        // First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
-        // Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                60000, pIntent);
-    }
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         listView = (ListView) findViewById(R.id.listView);
         textoAlerta = (TextView)findViewById(R.id.textoAlerta);
+       // FirebaseMessaging.getInstance().subscribeToTopic("all");
 
         downloadJSON("https://om.blog.br/api/getfusivel");
-        //scheduleAlarm();
 
         //textoAlerta.setTextColor(Color.RED );
         //textoAlerta.setText("Alertas detectados nas últimas 24 horas!");
@@ -102,10 +71,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
+
     //funcao de download do json dos registros
     //codigo de https://www.skysilk.com/blog/2018/how-to-connect-an-android-app-to-a-mysql-database/
     //adaptado para o proposito do fusivel eletronico
-    public void downloadJSON(final String urlWebService) {
+    private void downloadJSON(final String urlWebService) {
 
         class DownloadJSON extends AsyncTask<Void, Void, String> {
 

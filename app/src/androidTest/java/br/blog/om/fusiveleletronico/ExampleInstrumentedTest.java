@@ -1,4 +1,4 @@
-package com.example.primeiraaplicacao;
+package br.blog.om.fusiveleletronico;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.example.primeiraaplicacao", appContext.getPackageName());
+        assertEquals("com.example.om.primeiraaplicacao", appContext.getPackageName());
     }
 }

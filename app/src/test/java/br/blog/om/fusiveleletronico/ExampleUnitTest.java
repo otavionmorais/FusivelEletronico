@@ -1,4 +1,4 @@
-package com.example.primeiraaplicacao;
+package br.blog.om.fusiveleletronico;
 
 import org.junit.Test;
 
