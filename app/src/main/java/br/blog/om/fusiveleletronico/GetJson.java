@@ -3,10 +3,6 @@ package br.blog.om.fusiveleletronico;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import org.json.JSONException;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,9 +17,10 @@ public class GetJson {
         downloadJSON("https://om.blog.br/api/getfusivel", contexto);
     }
 
-
+    //funcao de download de json
+    //codigo de https://www.skysilk.com/blog/2018/how-to-connect-an-android-app-to-a-mysql-database/
+    //adaptado para o proposito do fusivel eletronico
     private void downloadJSON(final String urlWebService, Context contexto) {
-
 
         class DownloadJSON extends AsyncTask<Void, Void, String> {
 
@@ -55,7 +52,6 @@ public class GetJson {
                     }
                     return sb.toString().trim(); //retorna o json dos registros
                 } catch (Exception e) {
-                    Log.i("arky",""+e.getMessage());
                     return null; //retorna null caso haja erro na leitura dos dados
                 }
             }
