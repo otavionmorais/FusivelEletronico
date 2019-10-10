@@ -1,0 +1,2 @@
+include ':app', ':mysql-connector-java-8.0.17'
+rootProject.name='primeiraAplicacao'
