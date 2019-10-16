@@ -1,12 +1,16 @@
 package br.blog.om.fusiveleletronico;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,15 +20,17 @@ import android.widget.TextView;
 import com.google.firebase.messaging.FirebaseMessaging;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class MainActivity extends AppCompatActivity {
 
     static ListView listView;
     ProgressDialog load;
-    TextView textoAlerta;
-    String jsonDados;
+    static TextView textoAlerta;
     private static AppCompatActivity staticContext;
+    static ActionBar barraSuperior;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,14 +56,13 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         textoAlerta = (TextView)findViewById(R.id.textoAlerta);
         FirebaseMessaging.getInstance().subscribeToTopic("all");
-
-        //textoAlerta.setTextColor(Color.RED );
-        //textoAlerta.setText("Alertas detectados nas últimas 24 horas!");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        staticContext=MainActivity.this;
+        barraSuperior = getSupportActionBar();
         GetJson getJson = new GetJson(MainActivity.this);
     }
 
@@ -92,6 +97,31 @@ public class MainActivity extends AppCompatActivity {
                     stocks[i] = obj.getString("dia") + "  |  " + obj.getString("local"); //alimenta o array de strings
                 }
 
+                String dataUltimoAlerta=jsonArray.getJSONObject(0).getString("dia").split(" | ")[0];
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(formatter.parse(dataUltimoAlerta));
+
+                int anoAlerta = calendar.get(Calendar.YEAR);
+                int mesAlerta = calendar.get(Calendar.MONTH);
+                int diaAlerta = calendar.get(Calendar.DAY_OF_MONTH);
+                calendar = Calendar.getInstance();
+                int anoAtual = calendar.get(Calendar.YEAR);
+                int mesAtual = calendar.get(Calendar.MONTH);
+                int diaAtual = calendar.get(Calendar.DAY_OF_MONTH);
+
+
+                if( anoAlerta==anoAtual && mesAlerta==mesAtual && (diaAtual-diaAlerta)<=1 ){
+                    textoAlerta.setTextColor(Color.RED);
+                    textoAlerta.setText("Alerta registrado recentemente!");
+                    barraSuperior.setBackgroundDrawable(new ColorDrawable(Color.RED));
+
+                } else {
+                    textoAlerta.setText("Sem registro de alertas nas últimas 24 horas.");
+                    textoAlerta.setTextColor(Color.parseColor("#949494"));
+                    barraSuperior.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
+                }
+
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(contexto
                         , android.R.layout.simple_list_item_1, stocks); //cria um adaptador para alimentar a lista
                 listView.setAdapter(arrayAdapter); //alimenta a lista com as informacoes do bando de dados
@@ -101,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }catch (Exception e){
             encerrarComErro(contexto);
+            Log.i("arky", e.getMessage());
         }
     }
 

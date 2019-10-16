@@ -15,4 +15,5 @@ public class ServicoNotificacao extends FirebaseMessagingService {
         Looper.prepare();
         GetJson getJson = new GetJson(MainActivity.getStaticContext());
     }
+
 }
