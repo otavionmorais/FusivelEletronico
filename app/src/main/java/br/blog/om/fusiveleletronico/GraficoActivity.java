@@ -20,7 +20,6 @@ public class GraficoActivity extends AppCompatActivity {
         setTitle("Gráfico de alertas");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navegador = findViewById(R.id.navegador);
-
     }
 
     @Override
@@ -30,7 +29,7 @@ public class GraficoActivity extends AppCompatActivity {
         load = ProgressDialog.show(GraficoActivity.this,
                        "Por favor aguarde", "Gerando gráfico..."); //mostra mensagem de carregamento dos dados
 
-        navegador.loadUrl("https://om.blog.br/api/graficofusivel");
+        navegador.loadUrl("https://om.blog.br/api/fusivel/grafico");
 
         navegador.setWebViewClient(new WebViewClient() {
 

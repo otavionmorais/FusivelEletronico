@@ -14,7 +14,7 @@ public class GetJson {
     private String jsonDados;
 
     public GetJson(Context contexto){
-        downloadJSON("https://om.blog.br/api/getfusivel", contexto);
+        downloadJSON("https://om.blog.br/api/fusivel/getalertas", contexto);
     }
 
     //funcao de download de json
