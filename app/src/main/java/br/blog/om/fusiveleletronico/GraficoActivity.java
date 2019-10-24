@@ -21,8 +21,16 @@ public class GraficoActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         navegador = findViewById(R.id.navegador);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         load = ProgressDialog.show(GraficoActivity.this,
-                "Por favor aguarde", "Gerando gráfico..."); //mostra mensagem de carregamento dos dados
+                       "Por favor aguarde", "Gerando gráfico..."); //mostra mensagem de carregamento dos dados
+
+        navegador.loadUrl("https://om.blog.br/api/graficofusivel");
 
         navegador.setWebViewClient(new WebViewClient() {
 
@@ -30,45 +38,15 @@ public class GraficoActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 load.dismiss();
-                invalidateOptionsMenu();
             }
 
         });
-
-        navegador.loadUrl("https://om.blog.br/api/graficofusivel");
-
     }
 
     @Override
     public boolean onSupportNavigateUp(){
         finish();
         return true;
-    }
-
-    private void navegar(){
-
-        class Navegar extends AsyncTask<Void, Void, String> {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                load = ProgressDialog.show(GraficoActivity.this,
-                        "Por favor aguarde", "Gerando gráfico..."); //mostra mensagem de carregamento dos dados
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-
-            }
-
-            @Override
-            protected String doInBackground(Void... voids) {
-
-               return null;
-            }
-        }
-        new Navegar().execute();
     }
 
 }

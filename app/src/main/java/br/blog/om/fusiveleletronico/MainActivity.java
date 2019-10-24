@@ -11,9 +11,13 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowInsets;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -56,6 +60,13 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
         textoAlerta = (TextView)findViewById(R.id.textoAlerta);
         FirebaseMessaging.getInstance().subscribeToTopic("all");
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mostrarMensagem("Alerta", parent.getItemAtPosition(position).toString());
+            }
+        });
     }
 
     @Override
@@ -69,6 +80,16 @@ public class MainActivity extends AppCompatActivity {
     private void mostrarGrafico(){
         Intent intent = new Intent(getApplicationContext(), GraficoActivity.class);
         startActivity(intent);
+    }
+
+    public void mostrarMensagem(String titulo, String msg){
+
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+        dlgAlert.setMessage(msg);
+        dlgAlert.setTitle(titulo);
+        dlgAlert.setPositiveButton("OK", null);
+        dlgAlert.create().show();//mostra dialogo
+
     }
 
     public static void encerrarComErro(Context contexto){
@@ -94,11 +115,16 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i); //recupera o objeto na posicao i do array
-                    stocks[i] = obj.getString("dia") + "  |  " + obj.getString("local"); //alimenta o array de strings
+                    stocks[i] = obj.getString("dia") + "  |  " + obj.getString("local");// + "  |  " + obj.getString("valor"); //alimenta o array de strings
+                    //stocks[i]=stocks[i].replaceAll("\\\\n", "\n");
                 }
 
+                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(contexto
+                        , android.R.layout.simple_list_item_1, stocks); //cria um adaptador para alimentar a lista
+                listView.setAdapter(arrayAdapter); //alimenta a lista com as informacoes do bando de dados
+
                 String dataUltimoAlerta=jsonArray.getJSONObject(0).getString("dia").split(" | ")[0];
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(formatter.parse(dataUltimoAlerta));
 
@@ -115,16 +141,11 @@ public class MainActivity extends AppCompatActivity {
                     textoAlerta.setTextColor(Color.RED);
                     textoAlerta.setText("Alerta registrado recentemente!");
                     barraSuperior.setBackgroundDrawable(new ColorDrawable(Color.RED));
-
                 } else {
                     textoAlerta.setText("Sem registro de alertas nas últimas 24 horas.");
                     textoAlerta.setTextColor(Color.parseColor("#949494"));
                     barraSuperior.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
                 }
-
-                ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(contexto
-                        , android.R.layout.simple_list_item_1, stocks); //cria um adaptador para alimentar a lista
-                listView.setAdapter(arrayAdapter); //alimenta a lista com as informacoes do bando de dados
 
             } else { //se houve problema ao recuperar dados
                 encerrarComErro(contexto);
