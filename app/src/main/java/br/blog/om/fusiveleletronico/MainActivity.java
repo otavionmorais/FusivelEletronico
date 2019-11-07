@@ -115,12 +115,12 @@ public class MainActivity extends AppCompatActivity {
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject obj = jsonArray.getJSONObject(i); //recupera o objeto na posicao i do array
-                    stocks[i] = obj.getString("dia") + "  |  " + obj.getString("local");// + "  |  " + obj.getString("valor"); //alimenta o array de strings
+                    stocks[i] = obj.getString("dia") + " | " + obj.getString("local") + " | \nValor: " + obj.getString("valor"); //alimenta o array de strings
                     //stocks[i]=stocks[i].replaceAll("\\\\n", "\n");
                 }
 
                 ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(contexto
-                        , android.R.layout.simple_list_item_1, stocks); //cria um adaptador para alimentar a lista
+                        , R.layout.listview, stocks); //cria um adaptador para alimentar a lista
                 listView.setAdapter(arrayAdapter); //alimenta a lista com as informacoes do bando de dados
 
                 String dataUltimoAlerta=jsonArray.getJSONObject(0).getString("dia").split(" | ")[0];
